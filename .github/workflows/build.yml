@@ -8,6 +8,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: unzip -q NowBarStatus-source.zip
+      - name: Patch promoted ongoing flag
+        run: |
+          sed -i 's|b.setRequestPromotedOngoing(true);|android.os.Bundle ex = new android.os.Bundle(); ex.putBoolean("android.requestPromotedOngoing", true); b.addExtras(ex);|' NowBarStatus/app/src/main/java/app/pocketstatus/nowbar/NowBarService.java
+          grep -n "requestPromotedOngoing" NowBarStatus/app/src/main/java/app/pocketstatus/nowbar/NowBarService.java
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
